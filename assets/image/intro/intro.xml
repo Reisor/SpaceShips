@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root version="1.0">
+  <info w="1853" h="769" />
+  <textures>
+    <texture filename="assets/image/intro/joalbor.jpg" x="0" y="0" w="768" h="768" />
+    <texture filename="assets/image/intro/fraserm.jpg" x="769" y="0" w="768" h="768" />
+    <texture filename="assets/image/intro/logoupv.png" x="1538" y="0" w="314" h="314" />
+    <texture filename="assets/image/intro/logodisca.png" x="1538" y="315" w="136" h="55" />
+    <texture filename="assets/image/intro/logodsic.png" x="1538" y="371" w="118" h="59" />
+  </textures>
+</root>

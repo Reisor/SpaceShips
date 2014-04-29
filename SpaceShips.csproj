@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1F52BAE6-A7F0-48AA-BC95-18E9A92666AE}</ProjectGuid>
+    <ProjectTypeGuids>{69878862-DA7D-4DC6-B0A1-50D8FAB4242F};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>SpaceShips</RootNamespace>
+    <AssemblyName>SpaceShips</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="Sce.PlayStation.Core" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Sce\Sce.Psm.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="API\API.csproj">
+      <Project>{E751AC08-C430-4AAB-8942-9CB0F6BEFC01}</Project>
+      <Name>API</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="assets\" />
+    <Folder Include="enemy\" />
+    <Folder Include="player\" />
+    <Folder Include="gameplay\" />
+    <Folder Include="scenes\" />
+    <Folder Include="utilities\" />
+    <Folder Include="assets\image\menu\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\audio\music\BlueSpace.mp3" />
+    <Content Include="assets\audio\music\GameBgm.mp3" />
+    <Content Include="assets\audio\music\LongSeamlessLoop.mp3" />
+    <Content Include="assets\audio\sound\Bullet.wav" />
+    <Content Include="assets\audio\sound\Explosion.wav" />
+    <Content Include="assets\audio\sound\Explosion2.wav" />
+    <Content Include="assets\audio\sound\SYS_SE_01.wav" />
+    <Content Include="assets\image\game.png" />
+    <Content Include="assets\image\intro\intro.png" />
+    <Content Include="osc.cfg" />
+    <Content Include="assets\app.bin" />
+    <Content Include="assets\levels\Level1.tmx" />
+    <Content Include="assets\image\game.xml" />
+    <Content Include="assets\image\intro\intro.xml" />
+    <Content Include="assets\image\menu\Menu.png" />
+    <Content Include="assets\fonts\Pixel-li.ttf" />
+    <Content Include="assets\audio\music\Music1.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="enemy\Enemy.cs" />
+    <Compile Include="enemy\EnemyBullet.cs" />
+    <Compile Include="enemy\EnemyCommander.cs" />
+    <Compile Include="player\Bullet.cs" />
+    <Compile Include="player\Player.cs" />
+    <Compile Include="player\PlayerInput.cs" />
+    <Compile Include="gameplay\CollisionCheck.cs" />
+    <Compile Include="gameplay\Explosion.cs" />
+    <Compile Include="gameplay\Star.cs" />
+    <Compile Include="scenes\GameUI.cs" />
+    <Compile Include="scenes\Map.cs" />
+    <Compile Include="scenes\Opening.cs" />
+    <Compile Include="scenes\PlayerSelect.cs" />
+    <Compile Include="utilities\ActionBase.cs" />
+    <Compile Include="utilities\AudioManager.cs" />
+    <Compile Include="utilities\GameActor.cs" />
+    <Compile Include="utilities\GameManager.cs" />
+    <Compile Include="utilities\LevelParser.cs" />
+    <Compile Include="AppMain.cs" />
+    <Compile Include="Game.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PsmMetadata Include="app.xml" />
+  </ItemGroup>
+</Project>
