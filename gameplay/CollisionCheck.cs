@@ -59,17 +59,22 @@ namespace SpaceShips
 						{
 							--enemy.life;
 							
-							if (enemy.life <= 0)
+							if (enemy.life <= 0 && enemy.enemyStatus != Enemy.EnemyStatus.BossExplosion)
 							{
-							bullet.Status = Actor.ActorStatus.Dead;
-							enemy.Status = Actor.ActorStatus.Dead;              
-							effectManager.AddChild(new Explosion(gs, "explosion", "explosion1-", "gif", 16,
-							    new Vector3(enemy.spriteB.Position.X, enemy.spriteB.Position.Y, 0.3f)));
-							
-							gs.Score += enemy.puntuation;
-							gs.audioManager.playSound("explosion2");
+								bullet.Status = Actor.ActorStatus.Dead;
+								if (enemy.enemyLevel < 9)
+									enemy.Status = Actor.ActorStatus.Dead;
+								else
+								{
+									enemy.enemyStatus = Enemy.EnemyStatus.BossExplosion;
+								}
+								effectManager.AddChild(new Explosion(gs, "explosion", "explosion1-", "gif", 16,
+								    new Vector3(enemy.spriteB.Position.X, enemy.spriteB.Position.Y, 0.3f)));
+
+								gs.Score += enemy.puntuation;
+								gs.audioManager.playSound("explosion2");
 							}
-							else
+							else if (enemy.enemyStatus != Enemy.EnemyStatus.BossExplosion)
 							{
 								enemy.enemyStatus = Enemy.EnemyStatus.Hit;
 								bullet.Status = Actor.ActorStatus.Dead;

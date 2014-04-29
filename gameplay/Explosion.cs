@@ -44,7 +44,9 @@ namespace SpaceShips
 		{
 			Name = name + idNum.ToString();
 
-			spritesB = new SpriteB[anim+1];
+			this.Status = Actor.ActorStatus.Action;
+
+			this.spritesB = new SpriteB[anim+1];
 
 			for (int i=1; i< anim+1; i++)
 			{
@@ -93,7 +95,8 @@ namespace SpaceShips
 
 		public override void Render ()
 		{
-			gs.piSprite.Add(spritesB[anim]);
+			if (Status == Actor.ActorStatus.Action || Status == Actor.ActorStatus.RenderOnly)
+				gs.piSprite.Add(spritesB[anim]);
 
 			base.Render ();
 		}

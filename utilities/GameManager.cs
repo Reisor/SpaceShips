@@ -24,6 +24,7 @@ namespace SpaceShips
 		private int cursor = 0;
 		private bool analogBlock = true;
 		private bool arcade = true;
+		private Font font61;
 
 		public Dictionary<string, SimpleSprite> gameManagerSprites;
 
@@ -52,20 +53,20 @@ namespace SpaceShips
 			sprite = new SimpleSprite(gs.Graphics, gs.textureMenu, 0,0,gs.textureMenu.Width,37,
 			                          gs.textureMenu.Width, 37, 90.0f,
 			                          new Vector2(gameManagerSprites["title"].Position.X+128,
-			            gameManagerSprites["title"].Position.Y));
+			            gameManagerSprites["title"].Position.Y+10));
 			gameManagerSprites.Add("pressStart", sprite);
 
 			sprite = new SimpleSprite(gs.Graphics, gs.textureMenu, 0,gs.textureMenu.Height-37,
 			                             gs.textureMenu.Width,gs.textureMenu.Height,
 			                          gs.textureMenu.Width, 37, 90.0f,
 			                          new Vector2(gameManagerSprites["title"].Position.X+128,
-			            gameManagerSprites["title"].Position.Y));
+			            gameManagerSprites["title"].Position.Y-50));
 			gameManagerSprites.Add("arcade", sprite);
 
 			sprite = new SimpleSprite(gs.Graphics, gs.textureMenu, 0,114,gs.textureMenu.Width,151,
 			                          gs.textureMenu.Width, 37, 90.0f,
 			                          new Vector2(gameManagerSprites["arcade"].Position.X+64,
-			            gameManagerSprites["title"].Position.Y));
+			            gameManagerSprites["title"].Position.Y-30));
 			gameManagerSprites.Add("survival", sprite);
 
 			sprite = new SimpleSprite(gs.Graphics, gs.textureMenu, 0,76,gs.textureMenu.Width,113,
@@ -73,6 +74,8 @@ namespace SpaceShips
 			                          new Vector2(gs.rectScreen.Width/2-37*2,
 			            gs.rectScreen.Height/2+235/2));
 			gameManagerSprites.Add("gameover", sprite);
+
+			font61 = new Font("/Application/assets/fonts/Pixel-li.ttf", 61, FontStyle.Regular);
 		}
 
 		/**
@@ -113,26 +116,7 @@ namespace SpaceShips
 				gs.debugString.WriteLine("StartMenu");
 #endif
 				// Cursor handler
-				if (gs.playerInput.LeftRightAxis() < 0.0f && analogBlock)
-				{
-					analogBlock = false;
-					gs.audioManager.playSound("systemSelect");
-					if (cursor==0)
-						cursor = 1;
-					else
-						cursor = 0;
-			    }
-				else if (gs.playerInput.LeftRightAxis() > 0.0f && analogBlock)
-				{
-					analogBlock = false;
-					gs.audioManager.playSound("systemSelect");
-					if (cursor==1)
-						cursor = 0;
-					else
-						cursor = 1;
-				}
-				if (gs.playerInput.LeftRightAxis() == 0.0f)
-					analogBlock = true;
+				cursorHandler();
 
 				// Menu handler
 				switch (cursor)
@@ -156,6 +140,7 @@ namespace SpaceShips
 							arcade = false;
 							gs.audioManager.playSound("systemSelect");
 							gs.Step = Game.StepType.SelectPlayer;
+							cursor = 0;
 						}
 						break;
 					default:
@@ -206,12 +191,86 @@ namespace SpaceShips
 					gs.audioManager.PauseSong();
 					cnt=0;
 				}
-				
+
+				if (gs.playerInput.StartButton())
+				{
+					gs.Step = Game.StepType.Pause;
+					pause();
+				}
+
 				++gs.GameCounter;
 
 				if (gs.appCounter % 100 == 0)
 					System.GC.Collect();
 
+				break;
+			case Game.StepType.Pause:
+#if DEBUG
+				gs.debugString.WriteLine("Pause");
+#endif
+				var texture = Text.createTexture("Pause", font61, 0xffff0000);
+				var textSprite = new TextSprite(texture, gs.rectScreen.Width/2-texture.Height/2
+				                            , gs.rectScreen.Height/2+texture.Width/2, 0.5f, 0.5f,
+				                            -90.0f, 1.0f, 1.0f);
+				gs.textList.Add(textSprite);
+
+				cursorHandler();
+
+				switch (cursor)
+				{
+					case 0:
+						gs.textList.Add(textSprite);
+						texture = Text.createTexture("Continue", font61, 0xbfff0000);
+						textSprite = new TextSprite(texture, textSprite.PositionX+texture.Height*2,
+						                            gs.rectScreen.Height/2+texture.Width/2,0.5f, 0.5f,
+						                            -90.0f, 1.0f, 1.0f);
+						gs.textList.Add(textSprite);
+						texture = Text.createTexture("Exit", font61, 0xffff0000);
+						textSprite = new TextSprite(texture, textSprite.PositionX+texture.Height,
+						                            gs.rectScreen.Height/2+texture.Width/2,0.5f, 0.5f,
+						                            -90.0f, 1.0f, 1.0f);
+						gs.textList.Add(textSprite);
+					
+						if (gs.playerInput.SpecialButton())
+						{
+							gs.audioManager.playSound("systemSelect");
+							gs.Step = Game.StepType.Gameplay;
+							resume();
+						}
+						break;
+					case 1:
+						gs.textList.Add(textSprite);
+						texture = Text.createTexture("Continue", font61, 0xffff0000);
+						textSprite = new TextSprite(texture, textSprite.PositionX+texture.Height*2,
+						                            gs.rectScreen.Height/2+texture.Width/2,0.5f, 0.5f,
+						                            -90.0f, 1.0f, 1.0f);
+						gs.textList.Add(textSprite);
+						texture = Text.createTexture("Exit", font61, 0xbfff0000);
+						textSprite = new TextSprite(texture, textSprite.PositionX+texture.Height,
+						                            gs.rectScreen.Height/2+texture.Width/2,0.5f, 0.5f,
+						                            -90.0f, 1.0f, 1.0f);
+						gs.textList.Add(textSprite);
+
+						if (gs.playerInput.SpecialButton())
+						{
+							gs.audioManager.playSound("systemSelect");
+							gs.Root.Search("Map").Status = Actor.ActorStatus.Action;
+							gameOver();
+							gs.NumShips=0;
+							cursor = 0;
+						}
+						break;
+					default:
+						break;
+				}
+
+				if (gs.playerInput.StartButton())
+				{
+					gs.Step = Game.StepType.Gameplay;
+					resume();
+				}
+
+				texture.Dispose();
 				break;
 			case Game.StepType.GameOver:
 #if DEBUG
@@ -235,21 +294,7 @@ namespace SpaceShips
 				}
 				else if(++cnt > 590)
 				{
-					gs.Root.Search("Player").Children.Clear();
-					gs.Root.Search("enemyManager").Children.Clear();
-					gs.Root.Search("enemyBulletManager").Children.Clear();
-					gs.audioManager.ChangeSong("Music1.mp3");
-
-					if (!arcade)
-					{
-						EnemyCommander enemyCommander =(EnemyCommander)gs.Root.Search("enemyCommander");
-						enemyCommander.Status = Actor.ActorStatus.Rest;
-						enemyCommander.resetWave();
-					}
-					
-					gameUI.ResetCountdown();
-					gs.Step= Game.StepType.Opening;
-					System.GC.Collect();
+					gameOver();
 				}
 				
 				break;
@@ -258,6 +303,79 @@ namespace SpaceShips
 			}
 			
 			base.Update();
+		}
+
+		private void pause()
+		{
+			gs.Root.Search("Player").Status = Actor.ActorStatus.Rest;
+			foreach (var child in gs.Root.Search("enemyManager").Children)
+				child.Status = Actor.ActorStatus.Rest;
+			foreach (var child in gs.Root.Search("effectManager").Children)
+				child.Status = Actor.ActorStatus.Rest;
+			foreach (var child in gs.Root.Search("bulletManager").Children)
+				child.Status = Actor.ActorStatus.Rest;
+			foreach (var child in gs.Root.Search("enemyBulletManager").Children)
+				child.Status = Actor.ActorStatus.Rest;
+			gs.Root.Search("Map").Status = Actor.ActorStatus.Rest;
+			gs.Root.Search("enemyCommander").Status = Actor.ActorStatus.Rest;
+		}
+
+		private void resume()
+		{
+			gs.Root.Search("Player").Status = Actor.ActorStatus.Action;
+			gs.Root.Search("Map").Status = Actor.ActorStatus.Action;
+			foreach (var child in gs.Root.Search("enemyManager").Children)
+				child.Status = Actor.ActorStatus.Action;
+			foreach (var child in gs.Root.Search("effectManager").Children)
+				child.Status = Actor.ActorStatus.Action;
+			foreach (var child in gs.Root.Search("bulletManager").Children)
+				child.Status = Actor.ActorStatus.Action;
+			foreach (var child in gs.Root.Search("enemyBulletManager").Children)
+				child.Status = Actor.ActorStatus.Action;
+			gs.Root.Search("enemyCommander").Status = Actor.ActorStatus.Action;
+		}
+
+		private void cursorHandler()
+		{
+			if (gs.playerInput.LeftRightAxis() < 0.0f && analogBlock)
+				{
+					analogBlock = false;
+					gs.audioManager.playSound("systemSelect");
+					if (cursor==0)
+						cursor = 1;
+					else
+						cursor = 0;
+			    }
+				else if (gs.playerInput.LeftRightAxis() > 0.0f && analogBlock)
+				{
+					analogBlock = false;
+					gs.audioManager.playSound("systemSelect");
+					if (cursor==1)
+						cursor = 0;
+					else
+						cursor = 1;
+				}
+				if (gs.playerInput.LeftRightAxis() == 0.0f)
+					analogBlock = true;
+		}
+
+		private void gameOver()
+		{
+			gs.Root.Search("Player").Children.Clear();
+			gs.Root.Search("enemyManager").Children.Clear();
+			gs.Root.Search("enemyBulletManager").Children.Clear();
+			gs.audioManager.ChangeSong("Music1.mp3");
+
+			if (!arcade)
+			{
+				EnemyCommander enemyCommander =(EnemyCommander)gs.Root.Search("enemyCommander");
+				enemyCommander.Status = Actor.ActorStatus.Rest;
+				enemyCommander.resetWave();
+			}
+			GameUI gameUI = (GameUI)gs.Root.Search("gameUI");
+			gameUI.ResetCountdown();
+			gs.Step= Game.StepType.Title;
+			System.GC.Collect();
 		}
 	}
 }

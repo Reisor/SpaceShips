@@ -130,7 +130,7 @@ namespace SpaceShips
 		{
 			font20.Dispose();
 			font40.Dispose();
-//			textSprite.Dispose();
+			textSprite.Dispose();
 
 			base.Terminate ();
 		}

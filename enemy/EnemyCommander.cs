@@ -150,7 +150,7 @@ namespace SpaceShips
 							new Enemy(gs, "assets/image/enemy/"+this.enemyTypes[r.Next(8,9)]+".png",
 					    	"enemy", 9,
 					        new Vector3(50, gs.rectScreen.Height/2,0.2f),
-					        10000, r.Next(60,100)/100.0f, 100));
+					        10000, r.Next(60,100)/100.0f, 10));
 			}
 
 			this.wave++;

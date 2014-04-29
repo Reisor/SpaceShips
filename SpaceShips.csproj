@@ -10,6 +10,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>SpaceShips</RootNamespace>
     <AssemblyName>SpaceShips</AssemblyName>
+    <ReleaseVersion>1.0</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,7 +64,6 @@
     <Content Include="assets\image\game.png" />
     <Content Include="assets\image\intro\intro.png" />
     <Content Include="osc.cfg" />
-    <Content Include="assets\app.bin" />
     <Content Include="assets\levels\Level1.tmx" />
     <Content Include="assets\image\game.xml" />
     <Content Include="assets\image\intro\intro.xml" />

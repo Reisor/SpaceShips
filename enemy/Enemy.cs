@@ -22,7 +22,7 @@ namespace SpaceShips
 
 		Int32 cnt = 0;
 
-		int enemyLevel;
+		public int enemyLevel;
 		float speed;
 
 		Vector2 trans;
@@ -40,6 +40,7 @@ namespace SpaceShips
 			Hit, /**< Hit status */
 			Damage, /**< Damage status */
 			Invincible, /**< Boss begining status */
+			BossExplosion,
 		};
 
 		/**
@@ -106,6 +107,7 @@ namespace SpaceShips
 
 			this.r = new Random(idNum);
 
+			this.Status = Actor.ActorStatus.Action;
 			this.enemyStatus = EnemyStatus.Normal;
 			this.enemyMovement = EnemyMovement.Positioning;
 
@@ -178,7 +180,24 @@ namespace SpaceShips
 						spriteB.SetColor(1.0f, 1.0f, 1.0f, 0.25f + (gs.appCounter%2)/2.0f);
 					}
 					break;
-
+				case EnemyStatus.BossExplosion:
+					if (++cnt > 400)
+					{
+						Status = Actor.ActorStatus.Dead;
+					}
+					else if (cnt % 40 == 0)
+					{
+						spriteB.SetColor(Vector4.One);
+						gs.Root.Search("effectManager").AddChild(new Explosion(gs, "explosion", "explosion1-", "gif", 16,
+							    new Vector3(r.Next(Convert.ToInt32(spriteB.Position.X-spriteB.Height/3),Convert.ToInt32(spriteB.Position.X+spriteB.Height/2)),
+					                   r.Next(Convert.ToInt32(spriteB.Position.Y-spriteB.Width/3),Convert.ToInt32(spriteB.Position.Y+spriteB.Width/2)), 0.3f)));
+						gs.audioManager.playSound("explosion");
+					}
+					else
+					{
+						spriteB.SetColor(1.0f, 1.0f, 1.0f, 0.25f + (gs.appCounter%2)/2.0f);
+					}
+					break;
 				default:
 					break;
 			}
@@ -307,7 +326,7 @@ namespace SpaceShips
 			}
 			else
 			{
-				if (cnt % 10 == 0)
+				if (cnt % 10 == 0 && enemyStatus != EnemyStatus.BossExplosion)
 				{
 					circularShot((enemyLevel%2 == 0) ? 2 : 1);
 					if(enemyLevel >= 3 && r.NextDouble() > 0.5f) directShot((enemyLevel%2 == 0) ? 2 : 1, 10.0f);
