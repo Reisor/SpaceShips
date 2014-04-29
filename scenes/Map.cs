@@ -17,7 +17,7 @@ namespace SpaceShips
 {
 	public class Map : GameActor
 	{
-		private float speed;
+		public float speed;
 		private int numOfmapTileX=0;
 		private string backgroundPath = "assets/image/background/";
 

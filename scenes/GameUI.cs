@@ -16,7 +16,7 @@ namespace SpaceShips
 	public class GameUI : GameActor
 	{
 		private UInt16 cnt=0;
-		private int countdown=0;
+		public int countdown=0;
 		private Font font20, font40;
 		private TextSprite textSprite;
 		private List<SpriteB> ship;
@@ -107,7 +107,7 @@ namespace SpaceShips
 
 		private void UpdateCountdown()
 		{
-			if (++cnt % 60 == 0)
+			if (++cnt % 60 == 0 || gs.playerInput.AnyButton())
 				countdown += 1;
 
 			var texture = Text.createTexture((9-countdown).ToString() , font40, 0xffff0000);

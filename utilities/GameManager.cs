@@ -219,6 +219,13 @@ namespace SpaceShips
 				switch (cursor)
 				{
 					case 0:
+						if (gs.playerInput.SpecialButton())
+						{
+							gs.audioManager.playSound("systemSelect");
+							gs.Step = Game.StepType.Gameplay;
+							resume();
+						}
+
 						gs.textList.Add(textSprite);
 						texture = Text.createTexture("Continue", font61, 0xbfff0000);
 						textSprite = new TextSprite(texture, textSprite.PositionX+texture.Height*2,
@@ -230,15 +237,16 @@ namespace SpaceShips
 						                            gs.rectScreen.Height/2+texture.Width/2,0.5f, 0.5f,
 						                            -90.0f, 1.0f, 1.0f);
 						gs.textList.Add(textSprite);
-					
+						break;
+					case 1:
 						if (gs.playerInput.SpecialButton())
 						{
 							gs.audioManager.playSound("systemSelect");
-							gs.Step = Game.StepType.Gameplay;
-							resume();
+							gs.Root.Search("Map").Status = Actor.ActorStatus.Action;
+							gameOver();
+							gs.NumShips=0;
+							cursor = 0;
 						}
-						break;
-					case 1:
 						gs.textList.Add(textSprite);
 						texture = Text.createTexture("Continue", font61, 0xffff0000);
 						textSprite = new TextSprite(texture, textSprite.PositionX+texture.Height*2,
@@ -250,15 +258,6 @@ namespace SpaceShips
 						                            gs.rectScreen.Height/2+texture.Width/2,0.5f, 0.5f,
 						                            -90.0f, 1.0f, 1.0f);
 						gs.textList.Add(textSprite);
-
-						if (gs.playerInput.SpecialButton())
-						{
-							gs.audioManager.playSound("systemSelect");
-							gs.Root.Search("Map").Status = Actor.ActorStatus.Action;
-							gameOver();
-							gs.NumShips=0;
-							cursor = 0;
-						}
 						break;
 					default:
 						break;
@@ -292,7 +291,7 @@ namespace SpaceShips
 					gs.audioManager.ResumeSong();
 					gs.Step = Game.StepType.Gameplay;
 				}
-				else if(++cnt > 590)
+				else if(gameUI.countdown == 9)
 				{
 					gameOver();
 				}

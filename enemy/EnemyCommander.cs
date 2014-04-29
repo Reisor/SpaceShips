@@ -47,11 +47,15 @@ namespace SpaceShips
 			if(gs.Root.Search("enemyManager").GetAliveChildren() == 0 && time < 100)
 			{
 				gs.Root.Search("enemyBulletManager").Children.Clear();
+				Map map = (Map)gs.Root.Search("Map");
+				map.speed = 4.0f;
 				printNewWave();
 			}
 			// Make enemies appear.
 			else if(gs.Root.Search("enemyManager").GetAliveChildren() == 0 && time == 100)
 			{
+				Map map = (Map)gs.Root.Search("Map");
+				map.speed = 1.0f;
 				newWave();
 			}
 			// Not enemies.
@@ -113,7 +117,7 @@ namespace SpaceShips
 								new Enemy(gs, "assets/image/enemy/"+this.enemyTypes[4]+".png",
 						    	"enemy", 5,
 						        new Vector3((float) r.Next(20, 2*gs.rectScreen.Width/4) ,(float) r.Next(20, gs.rectScreen.Height-20),0.2f),
-						        300, r.Next(60,100)/100.0f, 9));
+						        300, r.Next(60,100)/100.0f, 13));
 					}
 					//Enemys Level 6
 					if(wave%10 == 2 && r.NextDouble() > 0.98f)
@@ -122,7 +126,7 @@ namespace SpaceShips
 								new Enemy(gs, "assets/image/enemy/"+this.enemyTypes[5]+".png",
 						    	"enemy", 6,
 						        new Vector3((float) r.Next(20, 2*gs.rectScreen.Width/4) ,(float) r.Next(20, gs.rectScreen.Height-20),0.2f),
-						        400, r.Next(60,100)/100.0f, 9));
+						        400, r.Next(60,100)/100.0f, 20));
 					}
 					//Enemys Level 7
 					if(wave%10 == 3 && r.NextDouble() > 0.99f)
@@ -131,7 +135,7 @@ namespace SpaceShips
 								new Enemy(gs, "assets/image/enemy/"+this.enemyTypes[6]+".png",
 						    	"enemy", 7,
 						        new Vector3((float) r.Next(20, 2*gs.rectScreen.Width/4) ,(float) r.Next(20, gs.rectScreen.Height-20),0.2f),
-						        500, r.Next(60,100)/100.0f, 15));
+						        500, r.Next(60,100)/100.0f, 20));
 					}
 					//Enemys Level 8
 					if(wave%10 == 5 && r.NextDouble() > 0.99f)
@@ -140,7 +144,7 @@ namespace SpaceShips
 								new Enemy(gs, "assets/image/enemy/"+this.enemyTypes[7]+".png",
 						    	"enemy", 8,
 						        new Vector3((float) r.Next(20, 2*gs.rectScreen.Width/4) ,(float) r.Next(20, gs.rectScreen.Height-20),0.2f),
-						        600, r.Next(60,100)/100.0f, 20));
+						        600, r.Next(60,100)/100.0f, 30));
 					}
 				}
 			}
@@ -150,7 +154,7 @@ namespace SpaceShips
 							new Enemy(gs, "assets/image/enemy/"+this.enemyTypes[r.Next(8,9)]+".png",
 					    	"enemy", 9,
 					        new Vector3(50, gs.rectScreen.Height/2,0.2f),
-					        10000, r.Next(60,100)/100.0f, 10));
+					        10000, r.Next(60,100)/100.0f, 100));
 			}
 
 			this.wave++;
