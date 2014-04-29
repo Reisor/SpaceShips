@@ -75,6 +75,7 @@ namespace SpaceShips
 			StartMenu, /**< Game modes state */
 			SelectPlayer, /**< Select player mode state */
 			Gameplay, /**< Gameplay state. */
+			Pause,
 			GameOver, /**< Gameover state. */
 		}
 		
@@ -152,7 +153,7 @@ namespace SpaceShips
 			// Pause mode by press start button.
 			if((this.PadData.ButtonsDown & (GamePadButtons.Start)) != 0 && Step == StepType.Gameplay)
 			{
-				m_pause = m_pause ? false : true;
+				//m_pause = m_pause ? false : true;
 			}
 #endif
 			if(m_pause==true && (this.PadData.ButtonsDown & (GamePadButtons.Select)) != 0)
@@ -197,6 +198,14 @@ namespace SpaceShips
 			piSprite.Update();
 			piSprite.Render();
 
+			if (textList.Capacity != 0)
+			{
+				foreach (var singleText in textList)
+				{
+					Text.DrawSprite(singleText);
+				}
+			}
+
 			switch(Step)
 			{
 			case Game.StepType.Opening:
@@ -227,6 +236,8 @@ namespace SpaceShips
 				break;
 			case Game.StepType.Gameplay:
 				break;
+			case Game.StepType.Pause:
+				break;
 			case Game.StepType.GameOver:
 				gameManager.gameManagerSprites["gameover"].Render();
 				break;
@@ -236,13 +247,7 @@ namespace SpaceShips
 #if DEBUG
 			debugString.WriteLine("Sprite Cnt="+piSprite.GetNumOfSprite());
 #endif
-			if (textList.Capacity != 0)
-			{
-				foreach (var singleText in textList)
-				{
-					Text.DrawSprite(singleText);
-				}
-			}
+
 
 			if (textList.Capacity != 0)
 			{
